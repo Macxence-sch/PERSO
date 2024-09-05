@@ -53,3 +53,9 @@
 (define (mylength s)
   (if (null? s) 0
       (+ 1 (mylength (cdr s)))))
+
+
+
+
+(define (suite a b)
+   (if (= a b) b ((display a )(suite (+ a 1) b))))
