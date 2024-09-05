@@ -34,3 +34,22 @@
     ((= n 1) 1)
     (else
      (+ 1 (binaire (quotient n 2))))))
+
+
+(define (boum n)
+  (if (zero? n)
+      (begin
+        (display "0 BOUM !!!!!!!!!!!!!!!!!!!!!!!!")
+        (newline))
+      (begin
+        (display n)
+        (display "...")
+        (newline)
+        (boum (- n 1)))))
+
+
+(define l '(1 2 3 4 5))
+
+(define (mylength s)
+  (if (null? s) 0
+      (+ 1 (mylength (cdr s)))))
