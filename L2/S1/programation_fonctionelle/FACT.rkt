@@ -58,4 +58,4 @@
 
 
 (define (suite a b)
-   (if (= a b) b ((display a )(suite (+ a 1) b))))
+   (if (= a b) b ((begin (display a ))(suite (+ a 1) b))))
