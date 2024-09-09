@@ -1,0 +1,18 @@
+let nombre,i; 
+let impair, inf, sup, entier;
+i=0;
+
+do {
+  if (i == 1){
+    alert("Tu t'es trompé, retante ta chance");
+  }
+  nombre = prompt('Entrez un nombre impair supérieur à 10');
+  entier = parseInt(nombre) == nombre;
+  inf = nombre <= 20;
+  sup = nombre >= 10;
+  impair = nombre % 2;
+  i = 1;
+} while (!(entier&&inf&&sup&&impair));
+
+
+alert(nombre + ' est bien un nombre impair supérieur à 10 !');

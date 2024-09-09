@@ -1,0 +1,9 @@
+let message = '';
+let i = 9;
+while (i >= 0) {
+  message = message + i + ',';
+  i = i - 1;
+}
+
+message = message.slice(0,-1);
+alert(message);
