@@ -1,8 +1,25 @@
 #include <stdlib.h>
 #include <stdio.h>
+#define MAX_MOT 1000
+#define FILENAME_Mot "mot.dat" 
+
+struct mot{
+    int id;
+    int nb;
+    char mot[50]
+};
+
+struct datamot {
+    int points;
+    int count;
+    struct mot mots[MAX_MOT]
+};
+
 
 
 int main(){
+    struct datamot motDB;
+
     int points,b,choix;
 
     char tab[] = {'m', 'a', 'c', 'x', 'e','n', 'c', 'e'};
@@ -135,5 +152,32 @@ int main(){
             break;
         }
     }
+
+}
+
+
+
+
+void ajoutermot (struct datamot *motDB){
+    FILE *file;
+
+    file = fopen(FILENAME_Mot, "rb+");
+
+    if (file == NULL) {
+        	printf("Erreur lors de l'ouverture du fichier.\n");
+        	fclose(file);
+        	return;
+    }
+
+    fread(&motDB->count, sizeof(int), 1, file);
+    motDB->count = motDB->count + 1;
+
+    motDB->mots[motDB->count].id = motDB->count;
+
+    printf("\nDonne le nombre de lettre : \n");
+    scanf("%d",&motDB->mots[motDB->count].nb);
+
+    printf("Donne ton mot : \n");
+    scanf("%d",&motDB->mots[motDB->count].mot[motDB->mots[motDB->count].nb]);
 
 }
