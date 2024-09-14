@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #define MAX_MOT 1000
 #define FILENAME_Mot "mot.dat" 
 
@@ -19,18 +20,18 @@ struct datamot {
 void ajoutermot (struct datamot *motDB);
 
 int main(){
+    srand(time(NULL)); 
     struct datamot motDB;
 
     int points,b,choix;
 
-    char tab[] = {'m', 'a', 'c', 'x', 'e','n', 'c', 'e'};
     char tab2[500];
     int nb;
     int nberreur;
     int trouve;  
     char lettre;  
     int test,test2;
-
+    int id;
     points=0;
     
     nb=8;
@@ -45,7 +46,14 @@ int main(){
         switch (choix)
         {
         case (1):
+            
+            id = rand() % motDB.count;
+            if (id == 0) {
+                id = motDB.count;
+            }
+
             nberreur = 0;
+            nb = motDB.mots[id].nb;
 
             for (int i=0; i<nb; i++){
                 tab2[i] = '_';
@@ -64,23 +72,23 @@ int main(){
                 scanf(" %c",&lettre);
 
                 for (int i=0; i<nb; i++){
-                    if (tab[i]==lettre){
+                    if (motDB.mots[id].mot[i]==lettre){
                         printf("\nUne lettre minimum trouvée \n");
-                        tab2[i]=tab[i];
+                        tab2[i]=motDB.mots[id].mot[i];
 
                     }
                 }      
 
                 test=0;
                 for (int i=0; i<nb; i++){
-                    if (tab[i]!=lettre){
+                    if (motDB.mots[id].mot[i]!=lettre){
                         test = test +1;
                     }
                 }
 
                 test2=0;
                 for (int i=0; i<nb; i++){
-                    if (tab2[i]==tab[i]){
+                    if (tab2[i]==motDB.mots[id].mot[i]){
                         test2=test2+1;
                     }   
                 }
