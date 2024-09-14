@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #define MAX_MOT 1000
 #define FILENAME_Mot "mot.dat" 
 
@@ -15,7 +16,7 @@ struct datamot {
     struct mot mots[MAX_MOT]
 };
 
-
+void ajoutermot (struct datamot *motDB);
 
 int main(){
     struct datamot motDB;
@@ -116,7 +117,7 @@ int main(){
         case (3):
 
             while (b!=2){
-                printf("1 - Ajouter un mot\n"); 
+                printf("\n1 - Ajouter un mot\n"); 
                 printf("2 - Supprimer un mot\n"); 
                 printf("3 - Voir les mots\n"); 
                 printf("4 - Retour\n"); 
@@ -125,12 +126,14 @@ int main(){
                 switch (choix){
                     case (1):
                         
-                        printf("\n Ton mot fait combien de lettre ?\n");
+                        ajoutermot (&motDB);
+
+                        /*printf("\n Ton mot fait combien de lettre ?\n");
                         scanf(" %d",&nb);
                         for (int i = 0; i< nb;i++){
                             printf("%d er/eme lettres : \n",i+1);
                             scanf(" %c",&tab[i]);
-                        }
+                        }*/
                         break;
                     case (2):
 
@@ -159,8 +162,8 @@ int main(){
 
 
 void ajoutermot (struct datamot *motDB){
-    FILE *file;
-
+    /*FILE *file;
+    int iddd;
     file = fopen(FILENAME_Mot, "rb+");
 
     if (file == NULL) {
@@ -169,15 +172,23 @@ void ajoutermot (struct datamot *motDB){
         	return;
     }
 
-    fread(&motDB->count, sizeof(int), 1, file);
+    fread(&motDB->count, sizeof(int), 1, file);*/
     motDB->count = motDB->count + 1;
 
-    motDB->mots[motDB->count].id = motDB->count;
 
-    printf("\nDonne le nombre de lettre : \n");
-    scanf("%d",&motDB->mots[motDB->count].nb);
+    int iddd = motDB->count;
 
-    printf("Donne ton mot : \n");
-    scanf("%d",&motDB->mots[motDB->count].mot[motDB->mots[motDB->count].nb]);
+    motDB->mots[iddd].id = iddd;
 
+    printf("\nDonne ton mot : \n");
+    scanf(" %s",&motDB->mots[iddd].mot);
+    
+    int length = strlen(motDB->mots[iddd].mot);
+    motDB->mots[iddd].nb = length;
+    
+    printf("\nParfait voici le recap : \n");
+    printf("\nID du mot : %d\n",motDB->mots[iddd].id);
+    printf("Le mot : %s\n",motDB->mots[iddd].mot);
+    printf("Nombre de lettre : %d\n",motDB->mots[iddd].nb);
+    
 }
