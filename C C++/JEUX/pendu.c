@@ -17,7 +17,9 @@ struct datamot {
     struct mot mots[MAX_MOT]
 };
 
+void initialisation (struct datamot *motDB);
 void ajoutermot (struct datamot *motDB);
+void voirmot (struct datamot *motDB);
 
 int main(){
     srand(time(NULL)); 
@@ -40,6 +42,7 @@ int main(){
         printf("\n1 - On fait un pendu ?\n");
         printf("2 - Fin de jeux ?\n");
         printf("3 - Gestion Mot \n"); //a faire avec fichier
+        printf("4 - Quitter \n");
         printf("points : %d\n",points);
         scanf("%d",&choix);
 
@@ -147,7 +150,8 @@ int main(){
 
                         break;
 
-                    case (3):
+                    case (3):  
+                        voirmot (&motDB);
 
                         break;
                     case (4):
@@ -158,6 +162,12 @@ int main(){
                         break;
                 }}
             break;
+        case (4):
+            b=1;
+            break;
+        case (5):
+            //initialisation (&motDB);
+            break;
         default:
             printf("Tu t'es trompé de numéro !\n");
             break;
@@ -167,12 +177,26 @@ int main(){
 }
 
 
+void initialisation (struct datamot *motDB){
+    FILE *file;
+    
+    file = fopen(FILENAME_Mot, "wb");
+    motDB->count = 0;
+    motDB->points = 0;
+
+    fwrite(&motDB->count, sizeof(int), 1, file);
+    fwrite(&motDB->points, sizeof(int), 1, file);
+
+    fclose(file);
+    printf("fait");
+}
+
 
 
 void ajoutermot (struct datamot *motDB){
-    /*FILE *file;
+    FILE *file;
     int iddd;
-    file = fopen(FILENAME_Mot, "rb+");
+    file = fopen(FILENAME_Mot, "r+");
 
     if (file == NULL) {
         	printf("Erreur lors de l'ouverture du fichier.\n");
@@ -180,11 +204,11 @@ void ajoutermot (struct datamot *motDB){
         	return;
     }
 
-    fread(&motDB->count, sizeof(int), 1, file);*/
+    fread(&motDB->count, sizeof(int), 1, file);
     motDB->count = motDB->count + 1;
+    fwrite(&motDB->count, sizeof(int), 1, file);
 
-
-    int iddd = motDB->count;
+    iddd = motDB->count;
 
     motDB->mots[iddd].id = iddd;
 
@@ -199,4 +223,43 @@ void ajoutermot (struct datamot *motDB){
     printf("Le mot : %s\n",motDB->mots[iddd].mot);
     printf("Nombre de lettre : %d\n",motDB->mots[iddd].nb);
     
+    fseek(file, 0, SEEK_SET);
+    fwrite(&motDB->count, sizeof(int), 1, file);    
+    fseek(file, sizeof(int) + iddd * sizeof(struct mot), SEEK_SET);
+    fwrite(&motDB->mots[iddd], sizeof(struct mot), 1, file);
+    fclose(file);
+    
+}
+
+void voirmot (struct datamot *motDB){
+    FILE *file;
+    int iddd;
+    file = fopen(FILENAME_Mot, "r");
+
+    if (file == NULL) {
+        	printf("Erreur lors de l'ouverture du fichier.\n");
+        	fclose(file);
+        	return;
+    }
+
+    fread(&motDB->count, sizeof(int), 1, file);
+    iddd = motDB->count;
+
+    iddd = iddd+1;
+    
+    fseek(file, sizeof(int), SEEK_SET);
+
+    for (int i=2; i <= iddd; i++ ){
+        fread(&motDB->mots[iddd], sizeof(struct mot), 1, file);
+        //fread(&motDB->mots[iddd].id, sizeof(int), 1, file);
+        printf("\nID : %d",motDB->mots[iddd].id);
+        //fread(&motDB->mots[iddd].mot, sizeof(char), 1, file);
+        printf(" Mot : %s",motDB->mots[iddd].mot);
+        //fread(&motDB->mots[iddd].nb, sizeof(int), 1, file);
+        printf(" Nombre de lettre : %d",motDB->mots[iddd].nb);
+        printf(" \n");
+    }
+
+    fclose(file);
+
 }
