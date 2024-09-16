@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <locale.h>
 #define MAX_MOT 1000
 #define FILENAME_Mot "mot.dat" 
 
@@ -259,12 +260,18 @@ void jeux(struct datamot *motDB) {
         return;  
     }
 
+    
     fread(&motDB->count, sizeof(int), 1, file);
+    fread(&motDB->points, sizeof(int), 1, file);  
+
     printf("\n Il y a  : %d mots\n", motDB->count);
     
-    id = rand() % motDB->count; // Utilisez directement motDB->count
+    id = rand() % motDB->count;
+    if (id==0){
+        id = motDB->count;
+    }  
 
-    fseek(file, sizeof(int) + id * sizeof(struct mot), SEEK_SET);
+    fseek(file, sizeof(int) + id * sizeof(struct mot), SEEK_SET); 
     fread(&motDB->mots[id], sizeof(struct mot), 1, file);
 
     nberreur = 0;
@@ -278,6 +285,7 @@ void jeux(struct datamot *motDB) {
 
     trouve = 0;
     while (nberreur < 10 && !trouve) {
+        printf("Mot à trouver : ");
         for (int i = 0; i < nb; i++) {
             printf(" %c ", tab2[i]);
         }
@@ -307,17 +315,21 @@ void jeux(struct datamot *motDB) {
         }
 
         if (!trouve) {
-            printf("Nombre d'erreurs (attention pas plus de 10) : %d\n", nberreur);
+            printf("\nErreur : %d/10\n", nberreur);
         }
     }
 
     if (trouve) {
         printf("Bravo ! Tu as trouvé le mot !!!\n");
-        fseek(file, 0, SEEK_SET);
-        fread(&motDB->points, sizeof(int), 1, file);
+        printf("Mot : %s\n", motDB->mots[id].mot);
+
+        
         motDB->points++;
-        fseek(file, 0, SEEK_SET);
+
+        
+        fseek(file, sizeof(int), SEEK_SET);  
         fwrite(&motDB->points, sizeof(int), 1, file);
+
     } else {
         printf("Désolé, tu as fait trop d'erreurs. Le mot était : %s\n", motDB->mots[id].mot);
     }
