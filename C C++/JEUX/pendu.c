@@ -249,8 +249,9 @@ void supprimer(struct datamot *motDB) {
 
 void jeux(struct datamot *motDB) {
     int id, nberreur, nb, trouve;
-    char lettre;
+    char lettre,nblettreutil;
     char tab2[50] = {0};  
+    char tablettre[50] = {0};
 
     FILE *file;
     file = fopen(FILENAME_Mot, "r+");
@@ -267,8 +268,8 @@ void jeux(struct datamot *motDB) {
     printf("\n Il y a  : %d mots\n", motDB->count);
     
     id = rand() % motDB->count;
-    if (id==0){
-        id = motDB->count;
+    if (id==motDB->count){
+        id = motDB->count - 1;
     }  
 
     fseek(file, sizeof(int) + id * sizeof(struct mot), SEEK_SET); 
@@ -282,7 +283,7 @@ void jeux(struct datamot *motDB) {
     }
 
     printf("\nOn commence : Le mot fait %d lettres \n", nb);
-
+    nblettreutil = 0;
     trouve = 0;
     while (nberreur < 10 && !trouve) {
         printf("Mot à trouver : ");
@@ -290,8 +291,15 @@ void jeux(struct datamot *motDB) {
             printf(" %c ", tab2[i]);
         }
 
+        printf("\nLettres deja utilisées : ");
+        for (int i = 1; i<=nblettreutil; i++){
+            printf(" %c",tablettre[i]);
+        }
+        
         printf("\nDonne une lettre : \n");
         scanf(" %c", &lettre);
+        nblettreutil = nblettreutil+1;
+        tablettre[nblettreutil] = lettre;
 
         int lettre_trouvee = 0; 
         for (int i = 0; i < nb; i++) {
